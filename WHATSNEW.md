@@ -1,3 +1,10 @@
+Version: 3.0.0
+==============
+
+* Changed: Rename `IbexaMigrationBundle` to `KaliopMigrationBundle` to avoid conflicts with official ibexa/migrations.
+* Changed: Rename all elements prefixed with `ibexa_migration*` to `kaliop_migration*` to avoid ambiguity.
+* Changed: Rename `MigrationsDefinitions` to `KaliopMigrations` to avoid ambiguity.
+
 Version: 2.0.0
 ==============
 

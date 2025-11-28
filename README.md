@@ -90,7 +90,7 @@ status command in your eZPlatform root directory:
 
 The list of migrations which have been already applied is stored in the database, in a table named `kaliop_migrations`.
 The bundle will automatically create the table if needed.
-In case you need to use a different name for that table, you can change the Symfony parameter `ibexa_migration_bundle.table_name`.
+In case you need to use a different name for that table, you can change the Symfony parameter `kaliop_migration_bundle.table_name`.
 
 ### Applying migrations
 
@@ -303,7 +303,7 @@ Event Subscribers are supported as an alternative to Event Listeners, as is stan
     - and/or configuring Solr to always commit changes to the index immediately (eg. disable `commitwithin`)
 
 * when using SOLR in multi-core configurations and getting a `java.lang.NegativeArraySizeException` error, you will have
-  to set a lower value than the default 2147483647 for parameter `ibexa_migration_bundle.query_limit`
+  to set a lower value than the default 2147483647 for parameter `kaliop_migration_bundle.query_limit`
 
 * if you get fatal errors without any error message when running a migration which involves a lot of content changes,
   such as f.e. altering a contentType with many contents, it might be that you are running out of memory for your
