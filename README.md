@@ -3,7 +3,9 @@ Ibexa-Migration-Bundle for Ibexa 5
 
 This is an upgrade of [tanoconsulting/ibexa-migration-bundle](https://github.com/tanoconsulting/ibexa-migration-bundle for Ibexa 5.
 
-Version `^2.0` adds support for Ibexa 5.
+Version `^3.0` adds support for Ibexa 5.
+
+Version '^2.0' was dropped as it conflict with official Ibexa/Migrations.
 
 Version `1.0.6` includes the support of the `ezimageasset` field type for Ibexa 4.
 
@@ -31,7 +33,7 @@ Following versions are available:
 
 Run :
 
-    composer require 'mrk-te/ibexa-migration-bundle2:^2.0'
+    composer require 'mrk-te/ibexa-migration-bundle2:^3.0'
 
 This will install the bundle and all its dependencies.
 
@@ -172,7 +174,7 @@ Example command to generate an SQL migration definition:
 
 This will create the following file, which you are free to edit:
 
-    ./src/MigrationsDefinitions/2021XXYYHHMMSS_mysql_create-new-table.sql
+    ./src/KaliopMigrations/2021XXYYHHMMSS_mysql_create-new-table.sql
 
 *NB* if you rename the sql file, keep in mind that the type of database to which it is supposed to apply is the part
 of the filename between the first and second underscore characters.
@@ -198,7 +200,7 @@ migration definition. To generate a PHP migration definition, execute:
 
 This will create the following file, which you are free to edit:
 
-    ./src/MigrationsDefinitions/2021XXYYHHMMSS_AMigrationClass.php
+    ./src/KaliopMigrations/2021XXYYHHMMSS_AMigrationClass.php
 
 As you can see in the generated definition, the php class to be used for a migration needs to implement a specific
 interface. The Symfony DIC container is passed to the migration class so that it can access from it all the services,

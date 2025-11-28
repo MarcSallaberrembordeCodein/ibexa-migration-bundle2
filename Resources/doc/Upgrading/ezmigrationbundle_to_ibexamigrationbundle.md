@@ -5,7 +5,7 @@ Upgrade notes for developers coming from an ezmgrationbundle installation.
 
 * the default migration directory name is now `KaliopMigrations`, instead of `MigrationVersions` or `MigrationsDefinitions`.
   A Symfony parameter is available to tweak that name if you feel the need to.
-  Also, the `src/MigrationsDefinitons` directory is searched for migrations, if it exists, besides the
+  Also, the `src/KaliopMigrations` directory is searched for migrations, if it exists, besides the
   bundles directories.
 
 * config parameter `kaliop_bundle_migration.version_directory` was renamed to `kaliop_migration_bundle.version_directory`.
