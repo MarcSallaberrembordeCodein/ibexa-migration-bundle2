@@ -46,7 +46,7 @@ class IbexaImage extends FileFieldHandler implements FieldValueConverterInterfac
 
         return new ImageValue(
             array(
-                'path' => $realFilePath,
+                'inputUri' => $realFilePath,
                 'fileSize' => filesize($realFilePath),
                 'fileName' => $fileName != '' ? $fileName : basename($realFilePath),
                 'alternativeText' => $altText
