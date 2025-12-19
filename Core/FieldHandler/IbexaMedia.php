@@ -10,7 +10,7 @@ class IbexaMedia extends FileFieldHandler implements FieldValueConverterInterfac
     /**
      * Creates a value object to use as the field value when setting a media field type.
      *
-     * @param array|string $fieldValue The path to the file or an array with 'path' and many other keys
+     * @param array|string $fieldValue The path to the file or an array with 'input_uri' and many other keys
      * @param array $context The context for execution of the current migrations. Contains f.e. the path to the migration
      * @return MediaValue
      *
@@ -31,7 +31,7 @@ class IbexaMedia extends FileFieldHandler implements FieldValueConverterInterfac
         } else if (is_string($fieldValue)) {
             $filePath = $fieldValue;
         } else {
-            $filePath = $fieldValue['path'];
+            $filePath = $fieldValue['input_uri'];
             if (isset($fieldValue['filename'])) {
                 $fileName = $this->referenceResolver->resolveReference($fieldValue['filename']);
             }
@@ -66,7 +66,7 @@ class IbexaMedia extends FileFieldHandler implements FieldValueConverterInterfac
 
         return new MediaValue(
             array(
-                'path' => $realFilePath,
+                'inputUri' => $realFilePath,
                 'fileSize' => filesize($realFilePath),
                 'fileName' => $fileName != '' ? $fileName : basename($realFilePath),
                 'mimeType' => $mimeType != '' ? $mimeType : mime_content_type($realFilePath),
@@ -92,7 +92,7 @@ class IbexaMedia extends FileFieldHandler implements FieldValueConverterInterfac
         $binaryFile = $this->ioService->loadBinaryFile($fieldValue->id);
         /// @todo we should handle clustered configurations, to give back the absolute path on disk rather than the 'virtual' one
         return array(
-            'path' => realpath($this->ioRootDir) . '/' . ($this->ioDecorator ? $this->ioDecorator->undecorate($binaryFile->uri) : $fieldValue->uri),
+            'input_uri' => realpath($this->ioRootDir) . '/' . ($this->ioDecorator ? $this->ioDecorator->undecorate($binaryFile->uri) : $fieldValue->uri),
             'filename'=> $fieldValue->fileName,
             'mime_type' => $fieldValue->mimeType,
             'has_controller' => $fieldValue->hasController,

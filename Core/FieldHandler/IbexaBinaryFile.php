@@ -8,7 +8,7 @@ use Kaliop\IbexaMigrationBundle\API\FieldValueConverterInterface;
 class IbexaBinaryFile extends FileFieldHandler implements FieldValueConverterInterface
 {
     /**
-     * @param array|string $fieldValue The path to the file or an array with 'path' key
+     * @param array|string $fieldValue The path to the file or an array with 'input_uri' key
      * @param array $context The context for execution of the current migrations. Contains f.e. the path to the migration
      * @return BinaryFileValue
      *
@@ -24,7 +24,7 @@ class IbexaBinaryFile extends FileFieldHandler implements FieldValueConverterInt
         } if (is_string($fieldValue)) {
             $filePath = $fieldValue;
         } else {
-            $filePath = $this->referenceResolver->resolveReference($fieldValue['path']);
+            $filePath = $this->referenceResolver->resolveReference($fieldValue['input_uri']);
             if (isset($fieldValue['filename'])) {
                 $fileName = $this->referenceResolver->resolveReference($fieldValue['filename']);
             }
@@ -43,7 +43,7 @@ class IbexaBinaryFile extends FileFieldHandler implements FieldValueConverterInt
         }
 
         $fieldValues = array(
-            'path' => $realFilePath,
+            'inputUri' => $realFilePath,
             'fileSize' => filesize($realFilePath),
             'fileName' => $fileName != '' ? $fileName : basename($realFilePath),
             //'mimeType' => $mimeType != '' ? $mimeType : mime_content_type($realFilePath)
@@ -73,7 +73,7 @@ class IbexaBinaryFile extends FileFieldHandler implements FieldValueConverterInt
         $binaryFile = $this->ioService->loadBinaryFile($fieldValue->id);
         /// @todo we should handle clustered configurations, to give back the absolute path on disk rather than the 'virtual' one
         return array(
-            'path' => realpath($this->ioRootDir) . '/' . ($this->ioDecorator ? $this->ioDecorator->undecorate($binaryFile->uri) : $binaryFile->uri),
+            'inputUri' => realpath($this->ioRootDir) . '/' . ($this->ioDecorator ? $this->ioDecorator->undecorate($binaryFile->uri) : $binaryFile->uri),
             'filename'=> $fieldValue->fileName,
             'mimeType' => $fieldValue->mimeType
         );
