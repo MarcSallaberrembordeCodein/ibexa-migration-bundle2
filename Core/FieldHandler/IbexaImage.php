@@ -10,7 +10,7 @@ class IbexaImage extends FileFieldHandler implements FieldValueConverterInterfac
     /**
      * Creates a value object to use as the field value when setting an image field type.
      *
-     * @param array|string $fieldValue The path to the file or an array with 'path' and 'alt_text' keys
+     * @param array|string $fieldValue The path to the file or an array with 'input_uri' and 'alt_text' keys
      * @param array $context The context for execution of the current migrations. Contains f.e. the path to the migration
      * @return ImageValue
      *
@@ -26,7 +26,7 @@ class IbexaImage extends FileFieldHandler implements FieldValueConverterInterfac
         } else if (is_string($fieldValue)) {
             $filePath = $fieldValue;
         } else {
-            $filePath = $this->referenceResolver->resolveReference($fieldValue['path']);
+            $filePath = $this->referenceResolver->resolveReference($fieldValue['input_uri']);
             if (isset($fieldValue['alt_text'])) {
                 $altText = $this->referenceResolver->resolveReference($fieldValue['alt_text']);
             }
@@ -46,7 +46,7 @@ class IbexaImage extends FileFieldHandler implements FieldValueConverterInterfac
 
         return new ImageValue(
             array(
-                'path' => $realFilePath,
+                'inputUri' => $realFilePath,
                 'fileSize' => filesize($realFilePath),
                 'fileName' => $fileName != '' ? $fileName : basename($realFilePath),
                 'alternativeText' => $altText
@@ -69,7 +69,7 @@ class IbexaImage extends FileFieldHandler implements FieldValueConverterInterfac
 
         /// @todo we should handle clustered configurations, to give back the absolute path on disk rather than the 'virtual' one
         return array(
-            'path' => realpath($this->ioRootDir) . '/' . ($this->ioDecorator ? $this->ioDecorator->undecorate($fieldValue->uri) : $fieldValue->uri),
+            'input_uri' => realpath($this->ioRootDir) . '/' . ($this->ioDecorator ? $this->ioDecorator->undecorate($fieldValue->uri) : $fieldValue->uri),
             'filename'=> $fieldValue->fileName,
             'alternativeText' => $fieldValue->alternativeText
         );
