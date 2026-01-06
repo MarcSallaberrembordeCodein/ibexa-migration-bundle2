@@ -17,7 +17,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('ibexa_migration_bundle', 'array');
+        $treeBuilder = new TreeBuilder('kaliop_migration_bundle', 'array');
         $rootNode = $treeBuilder->getRootNode();
 
         // Here you should define the parameters that are allowed to
