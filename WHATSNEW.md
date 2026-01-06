@@ -5,6 +5,11 @@ Version: 3.0.0
 * Changed: Rename all elements prefixed with `ibexa_migration*` to `kaliop_migration*` to avoid ambiguity.
 * Changed: Rename `MigrationsDefinitions` to `KaliopMigrations` to avoid ambiguity.
 
+Version: 2.1.0
+==============
+
+* Fixed: Content type descriptions are not nullable. Ensure descriptions are always strings on fields too.
+
 Version: 2.0.0
 ==============
 
