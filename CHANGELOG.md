@@ -7,22 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version 3.0.0
 
+To upgrade to the 3.0.0 version :
+
+* Remove the old bundle declaration from `config/bundles.php` (e.g. `Kaliop\IbexaMigrationBundle\IbexaMigrationBundle::class => ['all' => true]`).
+* Update the bundle with composer : `composer require mrk-te/ibexa-migration-bundle2:^3.0`.
+* Ensure the bundle is declared with his new name in `config/bundles.php` (e.g. `Kaliop\IbexaMigrationBundle\KaliopMigrationBundle::class => ['all' => true]`).
+* Optionnally, rename the `src/MigrationsDefinitions` folder to `src/KaliopMigrations`.
+
 ### Changed
 
-* #8 - Rename `IbexaMigrationBundle` to `KaliopMigrationBundle` to avoid conflicts with official ibexa/migrations.
-* #8 - Rename all elements prefixed with `ibexa_migration*` to `kaliop_migration*` to avoid ambiguity.
-* #8 - Rename `MigrationsDefinitions` to `KaliopMigrations` to avoid ambiguity.
+* Rename `IbexaMigrationBundle` to `KaliopMigrationBundle` to avoid conflicts with official ibexa/migrations (#8).
+* Rename all elements prefixed with `ibexa_migration*` to `kaliop_migration*` to avoid ambiguity (#8).
+* Rename `MigrationsDefinitions` to `KaliopMigrations` to avoid ambiguity (#8).
 
 ## Version 2.1.0
 
 ### Changed
 
-* #6 - Update WHATSNEW to CHANGELOG following the "Keep a Changelog" format
+* Update WHATSNEW to CHANGELOG following the "Keep a Changelog" format (#6).
 
 ### Fixed
 
-* #1 - Fix image, binary files and media field types file input property name
-* #4 - Content type descriptions are not nullable. Ensure descriptions are always strings on fields too.
+* Fix image, binary files and media field types file input property name (#1).
+* Content type descriptions are not nullable. Ensure descriptions are always strings on fields too (#4).
 
 ## Version 2.0.0
 
