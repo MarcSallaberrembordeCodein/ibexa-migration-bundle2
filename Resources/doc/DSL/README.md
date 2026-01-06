@@ -24,7 +24,7 @@ Below is an example snippet for creation/update of a content with a field of typ
 
     attributes:
         image:
-            path: /path/to/the/image.jpg
+            input_uri: /path/to/the/image.jpg
             alt_text: 'Example alt text'
 
 A simplified form, which does not allow for setting the 'alt' attribute, is:
