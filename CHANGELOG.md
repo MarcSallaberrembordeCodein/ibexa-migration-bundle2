@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+* #1 - Fix image, binary files and media field types file input property name
 * #4 - Content type descriptions are not nullable. Ensure descriptions are always strings on fields too.
 
 ## Version 2.0.0
