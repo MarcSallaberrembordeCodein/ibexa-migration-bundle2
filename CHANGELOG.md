@@ -1,5 +1,22 @@
-Version: 2.0.0
-==============
+# CHANGELOG
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## Version 2.1.0 [Unreleased]
+
+### Changed
+
+* #6 - Update WHATSNEW to CHANGELOG following the "Keep a Changelog" format
+
+### Fixed
+
+* #1 - Fix image, binary files and media field types file input property name
+* #4 - Content type descriptions are not nullable. Ensure descriptions are always strings on fields too.
+
+## Version 2.0.0
 
 * Changed: Rename classes prefixed with `Ez*` to `Ibexa*`
 * Changed: Update namespace `\EzSystems\EzPlatformMatrixFieldtype\` to `\Ibexa\FieldTypeMatrix\`
@@ -17,27 +34,23 @@ Version: 2.0.0
 * Removed: Operation `type: mail / mode: send` and dependency to SwiftMailer. Use `type: service / mode: call` instead.
 
 
-Version: 1.0.6
-==============
+## Version 1.0.6
 
 * Fixed: Option `remove_drafts: true` not woking on content_type / update if draft belongs to another user than `admin`
 * Added: support to import `ezimageasset` field type
 
 
-Version: 1.0.5
-==============
+## Version 1.0.5
 
 * Fixed: Crash when using `roles` in `user/create` migrations (Issue #4)
 
 
-Version: 1.0.4
-==============
+## Version 1.0.4
 
 * Fixed: the `--admin-login` option was broken for `migrate` commands
 
 
-Version: 1.0.3
-==============
+## Version 1.0.3
 
 This release is aligned with tanoconsulting/ezmigrationbundle2 rel. 1.0.4
 
@@ -65,20 +78,17 @@ BC notes (for developer extending the bundle):
 * service `ez_migration_bundle.migration_service` requires an added `setConnection` call in its definition
 
 
-Version: 1.0.2
-==============
+## Version 1.0.2
 
 * Fixed fatal errors when running builtin migration `FixExecutedMigrationsPaths`
 
 
-Version: 1.0.1
-==============
+## Version 1.0.1
 
 * Fixed php warning in class `PHPExecutor` due to trait being used twice
 
 
-Version: 1.0
-============
+## Version 1.0
 
 This release is aligned with kaliop/ezmigrationbundle rel. 6.3.1 / tanoconsulting/ezmigrationbundle2 rel. 1.0.1
 
@@ -121,8 +131,7 @@ This release is aligned with kaliop/ezmigrationbundle rel. 6.3.1 / tanoconsultin
   and `resumeMigration` now have a different signature. `Migrationservice::migrationContextFromParameters` has been dropped
 
 
-Version 1.0-alpha1
-==================
+## Version 1.0-alpha1
 
 Initial release - forked from tanoconsulting/ezmigrationbundle2 ver. 1.0 alpha 3, merging wizhippo/ibexa-migration-bundle
 
