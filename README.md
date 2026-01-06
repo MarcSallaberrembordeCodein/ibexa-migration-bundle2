@@ -5,7 +5,7 @@ This is an upgrade of [tanoconsulting/ibexa-migration-bundle](https://github.com
 
 Version `^3.0` adds support for Ibexa 5.
 
-Version '^2.0' was dropped as it conflict with official Ibexa/Migrations.
+Version `^2.0` was dropped as it conflict with official Ibexa/Migrations.
 
 Version `1.0.6` includes the support of the `ezimageasset` field type for Ibexa 4.
 
