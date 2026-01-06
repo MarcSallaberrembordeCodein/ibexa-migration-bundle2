@@ -3,7 +3,9 @@ Ibexa-Migration-Bundle for Ibexa 5
 
 This is an upgrade of [tanoconsulting/ibexa-migration-bundle](https://github.com/tanoconsulting/ibexa-migration-bundle for Ibexa 5.
 
-Version `^2.0` adds support for Ibexa 5.
+Version `^3.0` adds support for Ibexa 5.
+
+Version '^2.0' was dropped as it conflict with official Ibexa/Migrations.
 
 Version `1.0.6` includes the support of the `ezimageasset` field type for Ibexa 4.
 
@@ -31,7 +33,7 @@ Following versions are available:
 
 Run :
 
-    composer require 'mrk-te/ibexa-migration-bundle2:^2.0'
+    composer require 'mrk-te/ibexa-migration-bundle2:^3.0'
 
 This will install the bundle and all its dependencies.
 
@@ -90,7 +92,7 @@ status command in your eZPlatform root directory:
 
 The list of migrations which have been already applied is stored in the database, in a table named `kaliop_migrations`.
 The bundle will automatically create the table if needed.
-In case you need to use a different name for that table, you can change the Symfony parameter `ibexa_migration_bundle.table_name`.
+In case you need to use a different name for that table, you can change the Symfony parameter `kaliop_migration_bundle.table_name`.
 
 ### Applying migrations
 
@@ -172,7 +174,7 @@ Example command to generate an SQL migration definition:
 
 This will create the following file, which you are free to edit:
 
-    ./src/MigrationsDefinitions/2021XXYYHHMMSS_mysql_create-new-table.sql
+    ./src/KaliopMigrations/2021XXYYHHMMSS_mysql_create-new-table.sql
 
 *NB* if you rename the sql file, keep in mind that the type of database to which it is supposed to apply is the part
 of the filename between the first and second underscore characters.
@@ -198,7 +200,7 @@ migration definition. To generate a PHP migration definition, execute:
 
 This will create the following file, which you are free to edit:
 
-    ./src/MigrationsDefinitions/2021XXYYHHMMSS_AMigrationClass.php
+    ./src/KaliopMigrations/2021XXYYHHMMSS_AMigrationClass.php
 
 As you can see in the generated definition, the php class to be used for a migration needs to implement a specific
 interface. The Symfony DIC container is passed to the migration class so that it can access from it all the services,
@@ -303,7 +305,7 @@ Event Subscribers are supported as an alternative to Event Listeners, as is stan
     - and/or configuring Solr to always commit changes to the index immediately (eg. disable `commitwithin`)
 
 * when using SOLR in multi-core configurations and getting a `java.lang.NegativeArraySizeException` error, you will have
-  to set a lower value than the default 2147483647 for parameter `ibexa_migration_bundle.query_limit`
+  to set a lower value than the default 2147483647 for parameter `kaliop_migration_bundle.query_limit`
 
 * if you get fatal errors without any error message when running a migration which involves a lot of content changes,
   such as f.e. altering a contentType with many contents, it might be that you are running out of memory for your

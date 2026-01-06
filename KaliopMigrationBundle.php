@@ -6,7 +6,7 @@ use Kaliop\IbexaMigrationBundle\DependencyInjection\CompilerPass\TaggedServicesC
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class IbexaMigrationBundle extends Bundle
+class KaliopMigrationBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {

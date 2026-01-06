@@ -350,7 +350,7 @@ EOT
     protected function getMigrationDirectory($bundleName)
     {
         if (!$bundleName) {
-            return $this->getApplication()->getKernel()->getProjectDir() . '/src/' . $this->configResolver->getParameter('ibexa_migration_bundle.version_directory');
+            return $this->getApplication()->getKernel()->getProjectDir() . '/src/' . $this->configResolver->getParameter('kaliop_migration_bundle.version_directory');
         }
 
         // Allow direct usage of a directory path instead of a bundle name
@@ -368,7 +368,7 @@ EOT
         }
 
         $bundle = $this->getApplication()->getKernel()->getBundle($bundleName);
-        $migrationDirectory = $bundle->getPath() . '/' . $this->configResolver->getParameter('ibexa_migration_bundle.version_directory');
+        $migrationDirectory = $bundle->getPath() . '/' . $this->configResolver->getParameter('kaliop_migration_bundle.version_directory');
 
         return $migrationDirectory;
     }
