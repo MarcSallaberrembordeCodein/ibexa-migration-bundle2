@@ -5,6 +5,7 @@ namespace Kaliop\IbexaMigrationBundle\Core\FieldHandler;
 use Ibexa\Contracts\Core\Repository\ContentService;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
+use Ibexa\Contracts\Core\Repository\LocationService;
 use Ibexa\Core\Base\Exceptions\InvalidArgumentException;
 use Ibexa\FieldTypePage\FieldType\LandingPage\Type;
 use Ibexa\FieldTypePage\FieldType\LandingPage\Value;
@@ -17,6 +18,7 @@ class IbexaLandingPage extends AbstractFieldHandler implements FieldValueConvert
         private readonly ?BlockDefinitionFactory $blockDefinitionFactory,
         private readonly ?Type $type,
         private readonly ?ContentService $contentService,
+        private readonly ?LocationService $locationService,
     )
     {
     }
@@ -38,9 +40,16 @@ class IbexaLandingPage extends AbstractFieldHandler implements FieldValueConvert
             throw new \DomainException('Bad value type');
         }
 
-        return $this->getFieldHashWithEmbedValueModified(
+        $hash = $this->getFieldHashWithSomeValueTypeModified(
             $this->type->toHash($fieldValue),
+            'embed',
             $this->replaceContentIdByRemoteId(...)
+        );
+
+        return $this->getFieldHashWithSomeValueTypeModified(
+            $hash,
+            'locationlist',
+            $this->replaceLocationIdListStringByRemoteIdList(...)
         );
     }
 
@@ -65,7 +74,18 @@ class IbexaLandingPage extends AbstractFieldHandler implements FieldValueConvert
             throw new \DomainException('Bad value type');
         }
 
-        return $this->type->fromHash($this->getFieldHashWithEmbedValueModified($fieldHash, $this->replacePotentialRemoteIdByContentId(...)));
+        $fieldHash = $this->getFieldHashWithSomeValueTypeModified(
+            $fieldHash,
+            'embed',
+            $this->replacePotentialRemoteIdByContentId(...)
+        );
+        $fieldHash = $this->getFieldHashWithSomeValueTypeModified(
+            $fieldHash,
+            'locationlist',
+            $this->replacePotentialLocationRemoteIdListByLocationListString(...)
+        );
+
+        return $this->type->fromHash($fieldHash);
     }
 
     /**
@@ -96,19 +116,68 @@ class IbexaLandingPage extends AbstractFieldHandler implements FieldValueConvert
     }
 
     /**
-     * @return array<string, mixed>
+     * @throws NotFoundException
+     * @throws UnauthorizedException
      */
-    private function getFieldHashWithEmbedValueModified(array $fieldHash, mixed $callback): array
+    private function replaceLocationIdListStringByRemoteIdList(string $value): ?array
     {
-        $embedAttributesByBlockIdentifier = $this->getEmbedAttributesByBlockIdentifier();
+        if (!$value) {
+            return null;
+        }
+        return array_map(
+            fn (string $locationId) => $this->replaceLocationIdByLocationRemoteId($locationId),
+            explode(',', $value)
+        );
+    }
 
-        $blockIdentifiersToHandle = array_keys($embedAttributesByBlockIdentifier);
+    /**
+     * @param string[]|string|null $value
+     * @return string|null
+     * @throws NotFoundException
+     * @throws UnauthorizedException
+     */
+    private function replacePotentialLocationRemoteIdListByLocationListString(array|string|null $value): ?string
+    {
+        if (!$value) {
+            return null;
+        }
+
+        if (is_array($value)) {
+            return implode(',', array_map(fn ($locationRemoteId) => $this->replaceLocationRemoteIdByLocationId($locationRemoteId), $value));
+        }
+
+        return $value;
+    }
+
+
+    /**
+     * @throws NotFoundException
+     * @throws UnauthorizedException
+     */
+    private function replaceLocationIdByLocationRemoteId(int $value): string
+    {
+        return $this->locationService->loadLocation($value)->remoteId;
+    }
+
+    /**
+     * @throws NotFoundException
+     * @throws UnauthorizedException
+     */
+    private function replaceLocationRemoteIdByLocationId(string $value): int
+    {
+        return $this->locationService->loadLocationByRemoteId($value)->id;
+    }
+
+    private function getFieldHashWithSomeValueTypeModified(array $fieldHash, string $someValueType, mixed $callback): array
+    {
+        $someTypeAttributesByBlockIdentifier = $this->getSomeValueTypeAttributesByBlockIdentifier($someValueType);
+        $blockIdentifiersToHandle = array_keys($someTypeAttributesByBlockIdentifier);
 
         if (!isset($fieldHash['zones'])) {
             return $fieldHash;
         }
 
-        foreach($fieldHash['zones'] as &$zoneInfo) {
+        foreach ($fieldHash['zones'] as &$zoneInfo) {
             if (!isset($zoneInfo['blocks'])) {
                 continue;
             }
@@ -117,7 +186,7 @@ class IbexaLandingPage extends AbstractFieldHandler implements FieldValueConvert
                     continue;
                 }
 
-                $attributeNameToHandle = $embedAttributesByBlockIdentifier[$blockInfo['type']];
+                $attributeNameToHandle = $someTypeAttributesByBlockIdentifier[$blockInfo['type']];
                 foreach ($blockInfo['attributes'] as &$attribute) {
                     if (in_array($attribute['name'] ?? null, $attributeNameToHandle, true)) {
                         $attribute['value'] = $callback($attribute['value']);
@@ -128,28 +197,27 @@ class IbexaLandingPage extends AbstractFieldHandler implements FieldValueConvert
 
         return $fieldHash;
     }
-
-    private function getEmbedAttributesByBlockIdentifier(): array
+    private function getSomeValueTypeAttributesByBlockIdentifier(string $someValueType): array
     {
-        static $embedAttributesByBlockIdentifier = null;
-        if ($embedAttributesByBlockIdentifier !== null) {
-            return $embedAttributesByBlockIdentifier;
+        static $someValueTypeAttributesByBlockIdentifierBySomeValueType = [];
+        if (isset($someValueTypeAttributesByBlockIdentifierBySomeValueType[$someValueType])) {
+            return $someValueTypeAttributesByBlockIdentifierBySomeValueType[$someValueType];
         }
 
-        $embedAttributesByBlockIdentifier = [];
+        $someValueTypeAttributesByBlockIdentifierBySomeValueType[$someValueType] = [];
 
         $blockDefinition = $this->blockDefinitionFactory->getConfiguration();
         foreach ($blockDefinition as $blockIdentifier => $config) {
             foreach ($config['attributes'] ?? [] as $attributeIdentifier => $attributeInfo) {
-                if ($attributeInfo['type'] === 'embed') {
-                    if (!isset($embedAttributesByBlockIdentifier[$blockIdentifier])) {
-                        $embedAttributesByBlockIdentifier[$blockIdentifier] = [];
+                if ($attributeInfo['type'] === $someValueType) {
+                    if (!isset($someValueTypeAttributesByBlockIdentifierBySomeValueType[$someValueType][$blockIdentifier])) {
+                        $someValueTypeAttributesByBlockIdentifierBySomeValueType[$someValueType][$blockIdentifier] = [];
                     }
-                    $embedAttributesByBlockIdentifier[$blockIdentifier][] = $attributeIdentifier;
+                    $someValueTypeAttributesByBlockIdentifierBySomeValueType[$someValueType][$blockIdentifier][] = $attributeIdentifier;
                 }
             }
         }
 
-        return $embedAttributesByBlockIdentifier;
+        return $someValueTypeAttributesByBlockIdentifierBySomeValueType[$someValueType];
     }
 }

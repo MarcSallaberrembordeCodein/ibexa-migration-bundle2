@@ -738,6 +738,7 @@ services:
             - "@?Ibexa\\FieldTypePage\\FieldType\\Page\\Block\\Definition\\BlockDefinitionFactory"
             - "@?Ibexa\\FieldTypePage\\FieldType\\LandingPage\\Type"
             - "@?Ibexa\\Contracts\\Core\\Repository\\ContentService"
+            - "@?Ibexa\\Contracts\\Core\\Repository\\LocationService"
         tags:
             - { name: kaliop_migration_bundle.complex_field, fieldtype: ibexa_landing_page, priority: 0 }
 
